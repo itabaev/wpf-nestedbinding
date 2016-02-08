@@ -1,0 +1,40 @@
+﻿<Window x:Class="WpfNestedBinding.Sample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sample="clr-namespace:WpfNestedBinding.Sample"
+        xmlns:n="clr-namespace:WpfNestedBinding;assembly=WpfNestedBinding"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type sample:MainViewModel}}"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <sample:JoinStringConverter x:Key="JoinStringConverter" />
+    </Window.Resources>
+    <Grid Margin="10">
+        <TextBlock>
+            <TextBlock.Text>
+                <n:NestedBinding Converter="{StaticResource JoinStringConverter}" ConverterParameter=",">
+                    <Binding Path="A" UpdateSourceTrigger="PropertyChanged" />
+
+                    <n:NestedBinding Converter="{StaticResource JoinStringConverter}" ConverterParameter=" ">
+                        <Binding Path="B" UpdateSourceTrigger="PropertyChanged" />
+
+                        <n:NestedBinding>
+                            <n:NestedBinding.MultiBinding>
+                                <MultiBinding Converter="{StaticResource JoinStringConverter}" ConverterParameter="">
+                                    <Binding Source="(" />
+                                    <Binding Path="C" UpdateSourceTrigger="PropertyChanged" />
+                                    <Binding Path="D" UpdateSourceTrigger="PropertyChanged" />
+                                    <Binding Source=")" />
+                                </MultiBinding>
+                            </n:NestedBinding.MultiBinding>
+                        </n:NestedBinding>
+                    </n:NestedBinding>
+
+                    <Binding Path="E" UpdateSourceTrigger="PropertyChanged" />
+                    <Binding Path="F" UpdateSourceTrigger="PropertyChanged" />
+                </n:NestedBinding>
+            </TextBlock.Text>
+        </TextBlock>
+    </Grid>
+</Window>
