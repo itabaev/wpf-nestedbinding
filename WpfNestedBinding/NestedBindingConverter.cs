@@ -5,28 +5,25 @@ using System.Windows.Data;
 
 namespace WpfNestedBinding
 {
-    internal class NestedBindingsConverter : IMultiValueConverter
+    internal class NestedBindingConverter : IMultiValueConverter
     {
-        public NestedBindingsConverter(NestedBindingsTree tree, Type targetType)
+        public NestedBindingConverter(NestedBindingsTree tree)
         {
             Tree = tree;
-            TargetType = targetType;
         }
 
         private NestedBindingsTree Tree { get; }
 
-        private Type TargetType { get; }
-
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            var value = GetTreeValue(Tree, values);
+            var value = GetTreeValue(Tree, values, targetType, culture);
             return value;
         }
 
-        private object GetTreeValue(NestedBindingsTree tree, object[] values)
+        private object GetTreeValue(NestedBindingsTree tree, object[] values, Type targetType, CultureInfo culture)
         {
-            var objects = tree.Nodes.Select(x => x is NestedBindingsTree ? GetTreeValue((NestedBindingsTree)x, values) : values[x.Index]).ToArray();
-            var value = tree.Converter.Convert(objects, TargetType, tree.ConverterParameter, tree.ConverterCulture);
+            var objects = tree.Nodes.Select(x => x is NestedBindingsTree ? GetTreeValue((NestedBindingsTree)x, values, targetType, culture) : values[x.Index]).ToArray();
+            var value = tree.Converter.Convert(objects, targetType, tree.ConverterParameter, tree.ConverterCulture ?? culture);
             return value;
         }
 

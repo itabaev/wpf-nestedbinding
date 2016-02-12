@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
@@ -69,7 +68,7 @@ namespace WpfNestedBinding
                 Mode = BindingMode.OneWay
             };
             var tree = GetNestedBindingsTree(this, multiBinding);
-            var converter = new NestedBindingsConverter(tree, (target.TargetProperty as DependencyProperty)?.PropertyType);
+            var converter = new NestedBindingConverter(tree);
             multiBinding.Converter = converter;
 
             return multiBinding.ProvideValue(serviceProvider);
